@@ -30,6 +30,8 @@
       --p0-glow: rgba(245, 158, 11, 0.25);
       --curfew: #ef4444;
       --curfew-glow: rgba(239, 68, 68, 0.25);
+      --chill: #ec4899;
+      --chill-glow: rgba(236, 72, 153, 0.25);
       --shallow: #8b5cf6;
       --rest: #06b6d4;
       
@@ -361,6 +363,10 @@
       border-left: 4px solid var(--health);
     }
 
+    .block-card.is-chill {
+      border-left: 4px solid var(--chill);
+    }
+
     .time-col {
       display: flex;
       flex-direction: column;
@@ -416,6 +422,7 @@
     .tag-health { background: rgba(16, 185, 129, 0.2); color: #34d399; }
     .tag-shallow { background: rgba(139, 92, 246, 0.2); color: #c084fc; }
     .tag-rest { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+    .tag-chill { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
 
     .block-desc {
       font-size: 13.5px;
@@ -854,10 +861,10 @@
         },
         {
           start: "13:30", end: "14:30", dur: "60m",
-          title: "High-Protein Lunch & Biological Trough Reset",
-          tag: "Health", type: "health",
-          desc: "Rajma/Chana + Multigrain Phulka + Daytime Curd (~24g P, 460 kcal). 15-min post-meal digestive walk.",
-          rule: "Circadian Dip window. Follow with 10-15 min eyes-closed NSDR rest."
+          title: "High-Protein Lunch & Post-Meal Scroll / Chill",
+          tag: "Lunch & Chill", type: "chill",
+          desc: "Rajma/Chana + Multigrain Phulka + Curd (~24g P, 460 kcal). 20-min zero-guilt phone time (reels, memes, Twitter, Reddit) during post-meal digestive stroll.",
+          rule: "Circadian Dip window. Enjoy relaxed scrolling without work guilt."
         },
         {
           start: "14:30", end: "16:30", dur: "2h",
@@ -882,10 +889,10 @@
         },
         {
           start: "18:00", end: "19:30", dur: "1.5h",
-          title: "Physical Stamina: 8k-10k Steps & Conditioning",
-          tag: "Health", type: "health",
-          desc: "Non-negotiable for fat-loss deficit (~800–1000 kcal net) and asthma lung volume expansion. Outdoor brisk walk + bodyweight.",
-          rule: "Brisk breathing pace. Hydrate with room-temp water only."
+          title: "Physical Stamina: 8k-10k Steps & Social Walk",
+          tag: "Health & Social", type: "health",
+          desc: "Essential for fat-loss (~800–1000 kcal net) and asthma airway conditioning. Outdoor brisk walk + prime phone time to call friends/family or listen to podcasts.",
+          rule: "Keep moving. Phone calls on speaker or headphones make 8k steps effortless."
         },
         {
           start: "19:30", end: "20:00", dur: "30m",
@@ -902,18 +909,18 @@
           rule: "Build code only. No tutorial paralysis."
         },
         {
-          start: "21:00", end: "21:30", dur: "30m",
-          title: "Obsidian Daily Review & Zeigarnik Closure",
-          tag: "Shallow", type: "shallow",
-          desc: "GTD shutdown: log accomplishments, roll over tasks, lock tomorrow's Top 3 MITs.",
-          rule: "Blue-light screens cutoff at 21:30."
+          start: "21:00", end: "21:45", dur: "45m",
+          title: "Guilt-Free Masti & Chill Time",
+          tag: "Masti & Phone", type: "chill",
+          desc: "Dedicated personal downtime: Instagram reels, YouTube, gaming, chatting with friends, or watching videos. You conquered your P0s; enjoy with zero guilt!",
+          rule: "Rule: 100% guilt-free leisure. Transition to shutdown at 21:45."
         },
         {
-          start: "21:30", end: "22:00", dur: "30m",
-          title: "Parasympathetic Wind-down & Golden Milk",
-          tag: "Health", type: "health",
-          desc: "Warm Golden Haldi Milk (150ml with black pepper & cinnamon). Physical book reading, ambient lighting.",
-          rule: "Cool bedroom temperature to trigger natural core temperature drop."
+          start: "21:45", end: "22:00", dur: "15m",
+          title: "Obsidian 5-min Shutdown & Golden Milk",
+          tag: "Wind-down", type: "rest",
+          desc: "Check off completed daily note tasks, lock tomorrow's MIT, sip warm golden haldi milk, and head to bed.",
+          rule: "Screen off at 22:00 for 7.5-8h restorative sleep."
         },
         {
           start: "22:00", end: "07:00", dur: "9h",
