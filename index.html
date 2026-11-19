@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Pranav Bansal — Master Daily Schedule & Rhythms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#0d1117">
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --bg-surface: #121824;
+      --bg-card: #182234;
+      --bg-card-hover: #1f2b42;
+      --border: #233148;
+      --border-accent: #374b6e;
+      --text-main: #f0f4fc;
+      --text-muted: #8b9bb4;
+      --text-dim: #5c6b84;
+      
+      /* Semantic Rhythms */
+      --deep-work: #3b82f6;
+      --deep-work-glow: rgba(59, 130, 246, 0.25);
+      --health: #10b981;
+      --health-glow: rgba(16, 185, 129, 0.25);
+      --p0-accent: #f59e0b;
+      --p0-glow: rgba(245, 158, 11, 0.25);
+      --curfew: #ef4444;
+      --curfew-glow: rgba(239, 68, 68, 0.25);
+      --shallow: #8b5cf6;
+      --rest: #06b6d4;
+      
+      --font-display: 'Fraunces', serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg);
+      background-image: 
+        radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.08), transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.06), transparent 45%),
+        linear-gradient(180deg, #0b0f17 0%, #0d121c 100%);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      line-height: 1.5;
+      padding-bottom: 80px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 24px 18px;
+    }
+
+    /* Header & Live Clock */
+    header.header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .badge-bar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .badge.live {
+      color: #34d399;
+      border-color: rgba(52, 211, 153, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 10px #34d399;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .title-area h1 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 6vw, 40px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      line-height: 1.15;
+    }
+
+    .title-area p {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      margin-top: 6px;
+      max-width: 64ch;
+    }
+
+    /* Live Hero Card */
+    .hero-card {
+      background: linear-gradient(145deg, #151e30, #101624);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      margin-bottom: 24px;
+      box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--deep-work), var(--health), var(--p0-accent));
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      align-items: center;
+    }
+
+    .hero-metric {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-metric .label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+    }
+
+    .hero-metric .clock-val {
+      font-family: var(--font-mono);
+      font-size: clamp(24px, 4vw, 32px);
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 2px;
+    }
+
+    .hero-metric .status-val {
+      font-size: 16px;
+      font-weight: 600;
+      color: #93c5fd;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-countdown {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--p0-accent);
+      background: rgba(245, 158, 11, 0.1);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      display: inline-block;
+      margin-top: 6px;
+    }
+
+    /* Mode Switcher Tabs */
+    .nav-tabs {
+      display: flex;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 22px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px 14px;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .tab-btn.active {
+      background: var(--bg-card);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-accent);
+    }
+
+    /* Chrono Curve Bar */
+    .curve-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .curve-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .curve-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font-mono);
+    }
+
+    .curve-visual {
+      display: grid;
+      grid-template-columns: 2fr 1fr 2fr 1.5fr 1fr;
+      height: 28px;
+      border-radius: 6px;
+      overflow: hidden;
+      gap: 3px;
+    }
+
+    .curve-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      color: #ffffff;
+      opacity: 0.9;
+    }
+
+    .seg-peak { background: #2563eb; }
+    .seg-trough { background: #7c3aed; }
+    .seg-rebound { background: #059669; }
+    .seg-fitness { background: #d97706; }
+    .seg-rest { background: #0891b2; }
+
+    /* Timeline Section */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .block-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      transition: all 0.2s ease;
+      position: relative;
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    @media (max-width: 680px) {
+      .block-card {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+
+    .block-card:hover {
+      background: var(--bg-card);
+      border-color: var(--border-accent);
+      transform: translateY(-1px);
+    }
+
+    .block-card.is-current {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(16, 185, 129, 0.05));
+      border: 1.5px solid var(--deep-work);
+      box-shadow: 0 0 20px var(--deep-work-glow);
+    }
+
+    .block-card.is-p0 {
+      border-left: 4px solid var(--p0-accent);
+    }
+
+    .block-card.is-curfew {
+      border-left: 4px solid var(--curfew);
+    }
+
+    .block-card.is-deep {
+      border-left: 4px solid var(--deep-work);
+    }
+
+    .block-card.is-health {
+      border-left: 4px solid var(--health);
+    }
+
+    .time-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .time-range {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+
+    .time-dur {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .info-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .block-title {
+      font-size: 15.5px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .block-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .tag-p0 { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .tag-deep { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .tag-curfew { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .tag-health { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .tag-shallow { background: rgba(139, 92, 246, 0.2); color: #c084fc; }
+    .tag-rest { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+
+    .block-desc {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .block-rule {
+      font-size: 12px;
+      color: #94a3b8;
+      background: rgba(0, 0, 0, 0.25);
+      border-left: 2px solid var(--border-accent);
+      padding: 4px 8px;
+      margin-top: 4px;
+      border-radius: 0 4px 4px 0;
+      font-style: italic;
+    }
+
+    .action-col {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .check-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: 1.5px solid var(--border-accent);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: transparent;
+      transition: all 0.15s ease;
+    }
+
+    .check-btn.checked {
+      background: var(--health);
+      border-color: var(--health);
+      color: #ffffff;
+    }
+
+    /* 1-3-5 Planner Section */
+    .planner-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      margin-bottom: 26px;
+    }
+
+    .planner-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .planner-sub {
+      color: var(--text-muted);
+      font-size: 13.5px;
+      margin-bottom: 16px;
+    }
+
+    .task-group {
+      margin-bottom: 16px;
+    }
+
+    .task-group-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+    }
+
+    .task-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 14px;
+      flex: 1;
+    }
+
+    .task-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .task-input.done {
+      text-decoration: line-through;
+      color: var(--text-dim);
+    }
+
+    /* Focus Timer Dock */
+    .timer-dock {
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .timer-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .timer-display {
+      font-family: var(--font-mono);
+      font-size: 26px;
+      font-weight: 700;
+      color: #ffffff;
+      min-width: 90px;
+    }
+
+    .timer-modes {
+      display: flex;
+      gap: 6px;
+    }
+
+    .timer-btn {
+      padding: 6px 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .timer-btn.active {
+      background: var(--deep-work);
+      color: #ffffff;
+      border-color: var(--deep-work);
+    }
+
+    .timer-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+    }
+
+    .ctrl-primary {
+      background: #ffffff;
+      color: #0b0f17;
+    }
+
+    .ctrl-secondary {
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    /* Actions Footer */
+    .actions-footer {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .action-button {
+      flex: 1;
+      min-width: 180px;
+      padding: 12px 18px;
+      border-radius: 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .action-button:hover {
+      background: var(--bg-card);
+      border-color: var(--border-accent);
+      color: #ffffff;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1e293b;
+      color: #ffffff;
+      padding: 12px 22px;
+      border-radius: 30px;
+      font-size: 13.5px;
+      font-weight: 500;
+      border: 1px solid var(--border-accent);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      transition: transform 0.25s ease;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Top Header -->
+    <header class="header">
+      <div class="top-meta">
+        <div class="badge-bar">
+          <span class="badge live"><span class="live-dot"></span> IST Sync</span>
+          <span class="badge">Canonical v2026.11</span>
+          <span class="badge">Chronotype: Bear / Solar</span>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-dim);" id="full-date-display">
+          Thursday, Nov 20, 2026
+        </div>
+      </div>
+
+      <div class="title-area">
+        <h1>Daily Master Schedule</h1>
+        <p>A precision energy-aligned circadian operating system. Balances P0 career execution, Wyzard SRE deep work, whole-food metabolic nutrition, and 8k step stamina.</p>
+      </div>
+    </header>
+
+    <!-- Live Status Card -->
+    <div class="hero-card">
+      <div class="hero-grid">
+        <div class="hero-metric">
+          <span class="label">Local Clock</span>
+          <span class="clock-val" id="live-clock">02:45:00</span>
+        </div>
+        <div class="hero-metric">
+          <span class="label">Current Operational Block</span>
+          <span class="status-val" id="current-block-name">Restorative Sleep</span>
+          <span class="hero-countdown" id="time-remaining-badge">4h 15m remaining</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode Selector -->
+    <nav class="nav-tabs" aria-label="Schedule Modes">
+      <button class="tab-btn active" data-mode="weekday" onclick="setMode('weekday')">
+        <span>⚡ Weekday Protocol</span>
+      </button>
+      <button class="tab-btn" data-mode="saturday" onclick="setMode('saturday')">
+        <span>🚀 Saturday Build Sprint</span>
+      </button>
+      <button class="tab-btn" data-mode="sunday" onclick="setMode('sunday')">
+        <span>🔄 Sunday GTD Reset</span>
+      </button>
+    </nav>
+
+    <!-- Circadian Rhythm Bar -->
+    <div class="curve-card">
+      <div class="curve-header">
+        <span class="curve-title">Circadian Energy Mapping</span>
+        <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-dim);">Ultradian Waveforms</span>
+      </div>
+      <div class="curve-visual">
+        <div class="curve-seg seg-peak" title="07:30–12:30 Peak Analytical">PEAK (DSA & SRE)</div>
+        <div class="curve-seg seg-trough" title="13:30–15:30 Trough">DIP (Shallow)</div>
+        <div class="curve-seg seg-rebound" title="16:00–18:00 Secondary Peak">REBOUND</div>
+        <div class="curve-seg seg-fitness" title="18:00–21:00 Physical & Build">STAMINA</div>
+        <div class="curve-seg seg-rest" title="21:30–07:00 Sleep">REST</div>
+      </div>
+    </div>
+
+    <!-- Focus Timer Dock -->
+    <div class="timer-dock">
+      <div class="timer-info">
+        <span class="timer-display" id="timer-display">90:00</span>
+        <div class="timer-modes">
+          <button class="timer-btn active" onclick="setTimerDuration(90)">90m Flow</button>
+          <button class="timer-btn" onclick="setTimerDuration(50)">50m Deep</button>
+          <button class="timer-btn" onclick="setTimerDuration(25)">25m Sprint</button>
+        </div>
+      </div>
+      <div class="timer-controls">
+        <button class="ctrl-btn ctrl-primary" id="timer-start-btn" onclick="toggleTimer()">Start Focus</button>
+        <button class="ctrl-btn ctrl-secondary" onclick="resetTimer()">Reset</button>
+      </div>
+    </div>
+
+    <!-- Timeline Blocks -->
+    <section class="timeline" id="timeline-container">
+      <!-- Injected by JavaScript -->
+    </section>
+
+    <!-- 1-3-5 Rule Planner Card -->
+    <section class="planner-card">
+      <div class="planner-title">
+        <span>🎯 Today's 1-3-5 Priorities</span>
+        <button class="timer-btn" onclick="clearCompletedTasks()" style="font-size: 11px;">Clear Done</button>
+      </div>
+      <p class="planner-sub">Prevent cognitive overload: 1 non-negotiable MIT, 3 medium objectives, 5 quick wins. Saved locally.</p>
+
+      <!-- 1 Big MIT -->
+      <div class="task-group">
+        <div class="task-group-title" style="color: #fbbf24;">⚡ 1 Big Thing (Must Complete)</div>
+        <div class="task-list" id="list-big"></div>
+      </div>
+
+      <!-- 3 Medium -->
+      <div class="task-group">
+        <div class="task-group-title" style="color: #60a5fa;">🔷 3 Medium Tasks (Core Work)</div>
+        <div class="task-list" id="list-medium"></div>
+      </div>
+
+      <!-- 5 Small -->
+      <div class="task-group">
+        <div class="task-group-title" style="color: #94a3b8;">▫️ 5 Small Wins (Quick Admin)</div>
+        <div class="task-list" id="list-small"></div>
+      </div>
+    </section>
+
+    <!-- Action Buttons -->
+    <div class="actions-footer">
+      <button class="action-button" onclick="copyObsidianDailyNote()">
+        <span>📋 Copy for Obsidian Daily Note</span>
+      </button>
+      <button class="action-button" onclick="downloadICal()">
+        <span>📅 Download iCal (.ics)</span>
+      </button>
+      <button class="action-button" onclick="reblockEmergency()">
+        <span>⚠️ Re-block Day (Meeting Spillover)</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <script>
+    // Schedule Data Definition
+    const SCHEDULES = {
+      weekday: [
+        {
+          start: "07:00", end: "07:30", dur: "30m",
+          title: "Mitochondrial Awakening & Hydration",
+          tag: "Health", type: "health",
+          desc: "Warm ginger-tulsi water (asthma airway clearance). Natural morning light exposure to anchor circadian clock.",
+          rule: "No phone/screens. Light mobility and airway clearing."
+        },
+        {
+          start: "07:30", end: "08:00", dur: "30m",
+          title: "P0: DSA Think Aloud Sprint",
+          tag: "P0 Career", type: "p0",
+          desc: "Python algorithmic models (William Fiset / Abdul Bari). Solve 1 core problem.",
+          rule: "Rule: Vocalize thought process out loud. Log to dsa-progress-tracker-2026-08."
+        },
+        {
+          start: "08:00", end: "09:00", dur: "60m",
+          title: "P0: CKA & K8s Internals + Breakfast",
+          tag: "P0 Career", type: "p0",
+          desc: "Mumshad CKA course / Linux namespaces & cgroups. High-protein breakfast (Paneer Cheela / Daliya Bowl ~25g P).",
+          rule: "Rule: 10-minute Feynman active recall test. No passive video watching."
+        },
+        {
+          start: "09:00", end: "11:30", dur: "2.5h",
+          title: "Deep Work 1: Wyzard Core Infrastructure",
+          tag: "Deep Work", type: "deep",
+          desc: "Circadian Peak Window. SRE platform automation, Terraform pipelines, toil reduction, telemetry design.",
+          rule: "Ruthless focus: notifications muted, zero email checking."
+        },
+        {
+          start: "11:30", end: "12:00", dur: "30m",
+          title: "Communication Batch #1 & Citrus Break",
+          tag: "Shallow", type: "shallow",
+          desc: "Slack & PR triage. Mid-morning snack: roasted bhuna chana + fresh sweet lime (Vitamin C non-heme iron absorption).",
+          rule: "Batch replies rapidly. Get up and log 500 steps."
+        },
+        {
+          start: "12:00", end: "13:30", dur: "1.5h",
+          title: "Deep Work 2: Architecture & Reliability",
+          tag: "Deep Work", type: "deep",
+          desc: "Complex ticket execution, cluster debugging, incident mitigation design.",
+          rule: "End exactly at 13:30 to preserve digestive schedule."
+        },
+        {
+          start: "13:30", end: "14:30", dur: "60m",
+          title: "High-Protein Lunch & Biological Trough Reset",
+          tag: "Health", type: "health",
+          desc: "Rajma/Chana + Multigrain Phulka + Daytime Curd (~24g P, 460 kcal). 15-min post-meal digestive walk.",
+          rule: "Circadian Dip window. Follow with 10-15 min eyes-closed NSDR rest."
+        },
+        {
+          start: "14:30", end: "16:30", dur: "2h",
+          title: "Collaborative Syncs & Shallow Execution",
+          tag: "Shallow", type: "shallow",
+          desc: "Team standups, documentation, low-cognitive engineering tasks, PR reviews.",
+          rule: "Cognitive error rate is highest here: avoid risky production migrations."
+        },
+        {
+          start: "16:30", end: "17:30", dur: "60m",
+          title: "Secondary Peak: SRE Wrap-up & Tomorrow Prep",
+          tag: "Deep Work", type: "deep",
+          desc: "Rebound focus window. Merge clean PRs, verify canary metrics, stage tomorrow's priorities.",
+          rule: "Close all active work loops to prevent Zeigarnik mental leakage."
+        },
+        {
+          start: "17:30", end: "18:00", dur: "30m",
+          title: "Communication Batch #2 & Warm Snack",
+          tag: "Health", type: "health",
+          desc: "Steamed warm moong sprouts chaat + adrak chai (~12g P). Final Slack/email clearance.",
+          rule: "Formal work shutdown. Close laptop work profiles."
+        },
+        {
+          start: "18:00", end: "19:30", dur: "1.5h",
+          title: "Physical Stamina: 8k-10k Steps & Conditioning",
+          tag: "Health", type: "health",
+          desc: "Non-negotiable for fat-loss deficit (~800–1000 kcal net) and asthma lung volume expansion. Outdoor brisk walk + bodyweight.",
+          rule: "Brisk breathing pace. Hydrate with room-temp water only."
+        },
+        {
+          start: "19:30", end: "20:00", dur: "30m",
+          title: "Strict Early Dinner Curfew",
+          tag: "Curfew", type: "curfew",
+          desc: "GERD-Asthma Axis Defense: Dinner completed by 7:30 PM (3 hours before sleep). Paneer Bhurji/Platter + Missi Roti + Lauki Soup (~30g P).",
+          rule: "Mandatory: No heavy or fried food. Zero eating after 8:00 PM."
+        },
+        {
+          start: "20:00", end: "21:00", dur: "60m",
+          title: "P1: Proof-of-Work Build Sprint",
+          tag: "P0 Career", type: "p0",
+          desc: "Tier-3 Bypass high-signal portfolio builder: Python tooling, Agentic AI, custom Antigravity skills.",
+          rule: "Build code only. No tutorial paralysis."
+        },
+        {
+          start: "21:00", end: "21:30", dur: "30m",
+          title: "Obsidian Daily Review & Zeigarnik Closure",
+          tag: "Shallow", type: "shallow",
+          desc: "GTD shutdown: log accomplishments, roll over tasks, lock tomorrow's Top 3 MITs.",
+          rule: "Blue-light screens cutoff at 21:30."
+        },
+        {
+          start: "21:30", end: "22:00", dur: "30m",
+          title: "Parasympathetic Wind-down & Golden Milk",
+          tag: "Health", type: "health",
+          desc: "Warm Golden Haldi Milk (150ml with black pepper & cinnamon). Physical book reading, ambient lighting.",
+          rule: "Cool bedroom temperature to trigger natural core temperature drop."
+        },
+        {
+          start: "22:00", end: "07:00", dur: "9h",
+          title: "Restorative Anabolic Sleep",
+          tag: "Rest", type: "rest",
+          desc: "Growth hormone surge, memory consolidation, pulmonary airway restoration.",
+          rule: "Dark room, zero notifications."
+        }
+      ],
+      saturday: [
+        {
+          start: "07:30", end: "08:30", dur: "60m",
+          title: "Relaxed Awakening & High-Protein Breakfast",
+          tag: "Health", type: "health",
+          desc: "Warm herbal tea, high-protein breakfast, relaxed morning stretch.",
+          rule: "Gentle start without alarm rush."
+        },
+        {
+          start: "08:30", end: "12:30", dur: "4h",
+          title: "Proof-of-Work Sprint (Tier-3 Bypass)",
+          tag: "P0 Career", type: "p0",
+          desc: "Unbroken 4-hour deep flow state on flagship AI Operations / Agentic Architecture project. This drives top-tier referral hiring.",
+          rule: "Pure creation: commit code, test pipelines, document architecture."
+        },
+        {
+          start: "12:30", end: "14:00", dur: "1.5h",
+          title: "Weekend High-Protein Lunch & Walk",
+          tag: "Health", type: "health",
+          desc: "Nutritious thali + relaxed sunlight walk.",
+          rule: "Full cognitive detachment from technical problems."
+        },
+        {
+          start: "14:00", end: "18:00", dur: "4h",
+          title: "Recreation, Errands & Personal Life",
+          tag: "Rest", type: "rest",
+          desc: "Social time, family, personal finance maintenance, hobbies.",
+          rule: "True rest recharge."
+        },
+        {
+          start: "18:00", end: "19:30", dur: "1.5h",
+          title: "Physical Movement & 10k Step Target",
+          tag: "Health", type: "health",
+          desc: "Long outdoor walk or workout to hit fat loss weekly steps quota.",
+          rule: "Podcast or audio enjoyment allowed."
+        },
+        {
+          start: "19:30", end: "20:00", dur: "30m",
+          title: "Strict Early Dinner Curfew",
+          tag: "Curfew", type: "curfew",
+          desc: "Light dinner by 7:30 PM preserving the GERD airway barrier.",
+          rule: "Never skip the early curfew on weekends."
+        },
+        {
+          start: "20:00", end: "22:30", dur: "2.5h",
+          title: "Curated Cinema & Relaxation",
+          tag: "Rest", type: "rest",
+          desc: "High-craft psychological cinema or fiction reading.",
+          rule: "Wind-down mode."
+        },
+        {
+          start: "22:30", end: "07:30", dur: "9h",
+          title: "Deep Restorative Sleep",
+          tag: "Rest", type: "rest",
+          desc: "Deep slow-wave recovery.",
+          rule: "Full sleep."
+        }
+      ],
+      sunday: [
+        {
+          start: "08:00", end: "09:30", dur: "1.5h",
+          title: "Gentle Morning & Spiritual Grounding",
+          tag: "Health", type: "health",
+          desc: "Spiritual routines, warm tea, family breakfast.",
+          rule: "Zero tech screens."
+        },
+        {
+          start: "09:30", end: "12:30", dur: "3h",
+          title: "Deep Reading & Skill Horizon Scanning",
+          tag: "Deep Work", type: "deep",
+          desc: "Read high-signal engineering papers, Kleppmann distributed systems, or FinOps paradigms.",
+          rule: "Enjoyable learning, not exam pressure."
+        },
+        {
+          start: "12:30", end: "14:00", dur: "1.5h",
+          title: "Sunday Family Lunch",
+          tag: "Health", type: "health",
+          desc: "Traditional Sunday meal within Ayurvedic principles.",
+          rule: "Mindful eating."
+        },
+        {
+          start: "14:00", end: "17:00", dur: "3h",
+          title: "Total Disconnection / Rest",
+          tag: "Rest", type: "rest",
+          desc: "Nap, casual walk, offline time.",
+          rule: "Zero work tasks."
+        },
+        {
+          start: "17:00", end: "18:30", dur: "1.5h",
+          title: "GTD Weekly Review & LinkedIn Note",
+          tag: "P0 Career", type: "p0",
+          desc: "1. Get Clear (inboxes to zero). 2. Get Current (review roadmaps). 3. Publish 1 LinkedIn Proof-of-Work artifact. 4. Plan next week's blocks.",
+          rule: "Non-negotiable weekly reset."
+        },
+        {
+          start: "18:30", end: "19:30", dur: "60m",
+          title: "Sunday Evening Fitness Walk",
+          tag: "Health", type: "health",
+          desc: "8,000 steps completion.",
+          rule: "Fresh air."
+        },
+        {
+          start: "19:30", end: "20:00", dur: "30m",
+          title: "Early Dinner Curfew",
+          tag: "Curfew", type: "curfew",
+          desc: "Light dinner by 7:30 PM.",
+          rule: "Pre-workweek digestive ease."
+        },
+        {
+          start: "20:00", end: "22:00", dur: "2h",
+          title: "Week Preview & Calm Wind-down",
+          tag: "Rest", type: "rest",
+          desc: "Prepare clothes, review Monday morning DSA target, golden milk.",
+          rule: "Early to bed for 7:00 AM Monday launch."
+        },
+        {
+          start: "22:00", end: "07:00", dur: "9h",
+          title: "Sleep & Circadian Reset",
+          tag: "Rest", type: "rest",
+          desc: "Sleep for Monday peak performance.",
+          rule: "Lights out."
+        }
+      ]
+    };
+
+    let currentMode = 'weekday';
+    let timerInterval = null;
+    let timerSeconds = 90 * 60;
+    let timerRunning = false;
+
+    // Initialize
+    function init() {
+      // Auto-select mode based on today's day
+      const day = new Date().getDay();
+      if (day === 6) currentMode = 'saturday';
+      else if (day === 0) currentMode = 'sunday';
+      else currentMode = 'weekday';
+      
+      updateModeButtons();
+      renderTimeline();
+      loadTasks();
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      updateModeButtons();
+      renderTimeline();
+    }
+
+    function updateModeButtons() {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === currentMode);
+      });
+    }
+
+    function timeToMinutes(tStr) {
+      const [h, m] = tStr.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('live-clock').textContent = `${h}:${m}:${s}`;
+
+      const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+      document.getElementById('full-date-display').textContent = now.toLocaleDateString('en-US', options);
+
+      // Determine active block
+      const nowMinutes = now.getHours() * 60 + now.getMinutes();
+      const blocks = SCHEDULES[currentMode];
+      let activeBlock = null;
+      let nextBlock = null;
+
+      for (let i = 0; i < blocks.length; i++) {
+        const b = blocks[i];
+        const bStart = timeToMinutes(b.start);
+        const bEnd = timeToMinutes(b.end);
+
+        let isMatch = false;
+        if (bStart < bEnd) {
+          isMatch = nowMinutes >= bStart && nowMinutes < bEnd;
+        } else {
+          // Crosses midnight (e.g. 22:00 - 07:00)
+          isMatch = nowMinutes >= bStart || nowMinutes < bEnd;
+        }
+
+        if (isMatch) {
+          activeBlock = b;
+          nextBlock = blocks[(i + 1) % blocks.length];
+          break;
+        }
+      }
+
+      const activeEl = document.getElementById('current-block-name');
+      const badgeEl = document.getElementById('time-remaining-badge');
+
+      if (activeBlock) {
+        activeEl.textContent = activeBlock.title;
+        
+        let remainingMin = 0;
+        const bEnd = timeToMinutes(activeBlock.end);
+        if (nowMinutes <= bEnd) {
+          remainingMin = bEnd - nowMinutes;
+        } else {
+          remainingMin = (1440 - nowMinutes) + bEnd;
+        }
+        
+        const remH = Math.floor(remainingMin / 60);
+        const remM = remainingMin % 60;
+        badgeEl.textContent = `${remH > 0 ? remH + 'h ' : ''}${remM}m until next block`;
+      } else {
+        activeEl.textContent = "Unscheduled Window";
+        badgeEl.textContent = "Free buffer";
+      }
+
+      // Highlight active card
+      document.querySelectorAll('.block-card').forEach(card => {
+        const cStart = card.dataset.start;
+        card.classList.toggle('is-current', activeBlock && activeBlock.start === cStart);
+      });
+    }
+
+    function renderTimeline() {
+      const container = document.getElementById('timeline-container');
+      container.innerHTML = '';
+      const blocks = SCHEDULES[currentMode];
+      const completedBlocks = JSON.parse(localStorage.getItem(`checked_blocks_${currentMode}`) || '{}');
+
+      blocks.forEach((block, idx) => {
+        const card = document.createElement('div');
+        const isChecked = !!completedBlocks[block.start];
+        card.className = `block-card is-${block.type}`;
+        card.dataset.start = block.start;
+
+        card.innerHTML = `
+          <div class="time-col">
+            <span class="time-range">${block.start} – ${block.end}</span>
+            <span class="time-dur">${block.dur}</span>
+          </div>
+          <div class="info-col">
+            <div class="info-header">
+              <span class="block-title">${block.title}</span>
+              <span class="block-tag tag-${block.type}">${block.tag}</span>
+            </div>
+            <p class="block-desc">${block.desc}</p>
+            ${block.rule ? `<div class="block-rule">${block.rule}</div>` : ''}
+          </div>
+          <div class="action-col">
+            <button class="check-btn ${isChecked ? 'checked' : ''}" onclick="toggleBlockCheck('${block.start}', this)" aria-label="Mark completed">
+              ${isChecked ? '✓' : ''}
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      updateClock();
+    }
+
+    function toggleBlockCheck(startKey, btn) {
+      const completed = JSON.parse(localStorage.getItem(`checked_blocks_${currentMode}`) || '{}');
+      if (completed[startKey]) {
+        delete completed[startKey];
+        btn.classList.remove('checked');
+        btn.textContent = '';
+      } else {
+        completed[startKey] = true;
+        btn.classList.add('checked');
+        btn.textContent = '✓';
+      }
+      localStorage.setItem(`checked_blocks_${currentMode}`, JSON.stringify(completed));
+    }
+
+    // 1-3-5 Planner Functions
+    function loadTasks() {
+      const data = JSON.parse(localStorage.getItem('user_tasks_135') || '{"big":[""],"medium":["","",""],"small":["","","","",""]}');
+      renderTaskList('list-big', data.big, 'big', 1, "e.g. Master Mumshad CKA networking scenario");
+      renderTaskList('list-medium', data.medium, 'medium', 3, "e.g. Solve 1 William Fiset DSA graph problem");
+      renderTaskList('list-small', data.small, 'small', 5, "e.g. Log daily weight and sync git repo");
+    }
+
+    function renderTaskList(containerId, items, type, count, placeholder) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const val = items[i] || '';
+        const itemEl = document.createElement('div');
+        itemEl.className = 'task-item';
+        itemEl.innerHTML = `
+          <input type="text" class="task-input" value="${escapeHtml(val)}" placeholder="${placeholder}" onchange="saveTasks('${type}', ${i}, this.value)">
+        `;
+        container.appendChild(itemEl);
+      }
+    }
+
+    function saveTasks(type, idx, value) {
+      const data = JSON.parse(localStorage.getItem('user_tasks_135') || '{"big":[""],"medium":["","",""],"small":["","","","",""]}');
+      data[type][idx] = value;
+      localStorage.setItem('user_tasks_135', JSON.stringify(data));
+    }
+
+    function clearCompletedTasks() {
+      if (confirm("Reset all 1-3-5 priority fields for tomorrow?")) {
+        localStorage.removeItem('user_tasks_135');
+        loadTasks();
+        showToast("Tasks reset.");
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    // Timer Implementation
+    function setTimerDuration(mins) {
+      document.querySelectorAll('.timer-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent.includes(mins + 'm'));
+      });
+      timerSeconds = mins * 60;
+      updateTimerDisplay();
+      if (timerRunning) toggleTimer();
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(timerSeconds / 60);
+      const s = timerSeconds % 60;
+      document.getElementById('timer-display').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    function toggleTimer() {
+      const btn = document.getElementById('timer-start-btn');
+      if (timerRunning) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        btn.textContent = "Resume";
+        btn.className = "ctrl-btn ctrl-primary";
+      } else {
+        timerRunning = true;
+        btn.textContent = "Pause";
+        btn.className = "ctrl-btn ctrl-secondary";
+        timerInterval = setInterval(() => {
+          if (timerSeconds > 0) {
+            timerSeconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            btn.textContent = "Start Focus";
+            alert("Focus session complete! Take a biological reset break.");
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      document.getElementById('timer-start-btn').textContent = "Start Focus";
+      timerSeconds = 90 * 60;
+      updateTimerDisplay();
+    }
+
+    // Clipboard & Obsidian Export
+    function copyObsidianDailyNote() {
+      const blocks = SCHEDULES[currentMode];
+      const today = new Date().toISOString().split('T')[0];
+      const tasks = JSON.parse(localStorage.getItem('user_tasks_135') || '{"big":[],"medium":[],"small":[]}');
+
+      let md = `## 🎯 Top Priorities (1-3-5 Rule)\n`;
+      md += `### P0 / MIT\n- [ ] ${tasks.big[0] || 'Focus on Core Roadmap Deliverable'}\n\n`;
+      md += `### Medium Tasks\n`;
+      (tasks.medium || []).forEach(t => { if (t) md += `- [ ] ${t}\n`; });
+      md += `\n### Quick Wins\n`;
+      (tasks.small || []).forEach(t => { if (t) md += `- [ ] ${t}\n`; });
+
+      md += `\n## ⏱️ Daily Schedule (${currentMode.toUpperCase()})\n`;
+      blocks.forEach(b => {
+        md += `- [ ] ${b.start} - ${b.end} :: ${b.title} *(${b.tag})*\n`;
+      });
+
+      md += `\n## 🌙 Daily Review\n- **Wins:** \n- **Adjustments needed:** \n- **Tomorrow's MIT:** \n`;
+
+      navigator.clipboard.writeText(md).then(() => {
+        showToast("Copied Obsidian Markdown to clipboard!");
+      });
+    }
+
+    function downloadICal() {
+      const blocks = SCHEDULES[currentMode];
+      let ics = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Pranav Bansal//Master Schedule//EN\nCALSCALE:GREGORIAN\n";
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0].replace(/-/g, '');
+
+      blocks.forEach(b => {
+        const sTime = b.start.replace(':', '') + '00';
+        const eTime = b.end.replace(':', '') + '00';
+        ics += "BEGIN:VEVENT\n";
+        ics += `SUMMARY:${b.title}\n`;
+        ics += `DESCRIPTION:${b.desc} Rule: ${b.rule}\n`;
+        ics += `DTSTART;TZID=Asia/Kolkata:${dateStr}T${sTime}\n`;
+        ics += `DTEND;TZID=Asia/Kolkata:${dateStr}T${eTime}\n`;
+        ics += "END:VEVENT\n";
+      });
+      ics += "END:VCALENDAR";
+
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `pranav-schedule-${currentMode}.ics`;
+      link.click();
+      showToast("Downloaded iCal (.ics) file!");
+    }
+
+    function reblockEmergency() {
+      alert("Emergency Re-block Activated: If a meeting or incident runs over, the golden rule is: DO NOT drop DSA (07:30) or the 19:30 Dinner Curfew. Compress the 14:30 shallow block and 16:30 admin block first. Sleep time (22:00) is locked to prevent airway inflammation.");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
